@@ -1,4 +1,5 @@
 import Joi from "joi";
+import { JoiOrdersSchema } from "../orders/orders.validation";
 
 export const JoiFullNameSchema = Joi.object({
   firstName: Joi.string().required().max(20).trim(),
@@ -21,4 +22,5 @@ export const JoiUserSchema = Joi.object({
   isActive: Joi.boolean().default(true),
   address: JoiAddressSchema,
   hobbies: Joi.array().items(Joi.string()),
+  orders: JoiOrdersSchema,
 });

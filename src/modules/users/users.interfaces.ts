@@ -1,3 +1,5 @@
+import { TOrders } from "../orders/orders.interfaces";
+
 export type TFullName = {
     firstName: string,
     lastName: string
@@ -21,7 +23,8 @@ export type TUsers = {
     email: string,
     isActive: boolean,
     hobbies: THobbies,
-    address: TAddress
+    address: TAddress,
+    orders: TOrders
 }
 
 

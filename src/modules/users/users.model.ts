@@ -1,3 +1,4 @@
+import { OrdersSchema } from './../orders/orders.model';
 import { Schema, model } from "mongoose";
 import { TAddress, TFullName, THobbies, TUsers } from "./users.interfaces";
 
@@ -36,6 +37,11 @@ export const AddressSchema = new Schema<TAddress>({
   },
 });
 
+
+
+
+
+
 export const UserSchema = new Schema<TUsers>({
   userId: {
     type: Number,
@@ -70,6 +76,9 @@ export const UserSchema = new Schema<TUsers>({
   hobbies: {
     type: [String],
   },
+
+  orders: OrdersSchema
+  
 });
 
 

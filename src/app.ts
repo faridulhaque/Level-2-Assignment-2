@@ -16,5 +16,6 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 app.use("/api/users", usersRoutes);
+// app.use("/api/users", usersRoutes);
 
 export default app;
