@@ -1,0 +1,16 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.usersRoutes = void 0;
+const express_1 = require("express");
+const users_controller_1 = require("../modules/users/users.controller");
+const orders_controller_1 = require("../modules/orders/orders.controller");
+const doesUserExist_1 = require("../modules/orders/doesUserExist");
+exports.usersRoutes = (0, express_1.Router)();
+exports.usersRoutes.get("/:userId", doesUserExist_1.doesUserExist, users_controller_1.getOneUser);
+exports.usersRoutes.get("/", users_controller_1.getAllUsers);
+exports.usersRoutes.get("/:userId/orders", doesUserExist_1.doesUserExist, orders_controller_1.getOrdersOfUser);
+exports.usersRoutes.get("/:userId/orders/total-price", doesUserExist_1.doesUserExist, orders_controller_1.getTotalPrice);
+exports.usersRoutes.post("/", users_controller_1.createUser);
+exports.usersRoutes.put("/:userId/orders", doesUserExist_1.doesUserExist, orders_controller_1.placeOrder);
+exports.usersRoutes.put("/:userId", doesUserExist_1.doesUserExist, users_controller_1.updateUser);
+exports.usersRoutes.delete("/:userId", doesUserExist_1.doesUserExist, users_controller_1.deleteOneUser);
