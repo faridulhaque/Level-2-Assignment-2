@@ -1,4 +1,8 @@
-import { TOrders } from "../orders/orders.interfaces";
+export type TOrders = {
+    productName: string;
+    price: number;
+    quantity: number;
+}
 
 export type TFullName = {
     firstName: string,
@@ -24,7 +28,7 @@ export type TUsers = {
     isActive: boolean,
     hobbies: THobbies,
     address: TAddress,
-    orders: TOrders
+    orders: TOrders[]
 }
 
 

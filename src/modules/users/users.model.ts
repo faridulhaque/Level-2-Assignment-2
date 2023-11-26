@@ -1,6 +1,11 @@
-import { OrdersSchema } from './../orders/orders.model';
 import { Schema, model } from "mongoose";
-import { TAddress, TFullName, THobbies, TUsers } from "./users.interfaces";
+import {
+  TAddress,
+  TFullName,
+  THobbies,
+  TOrders,
+  TUsers,
+} from "./users.interfaces";
 
 export const FullNameSchema = new Schema<TFullName>({
   firstName: {
@@ -37,10 +42,19 @@ export const AddressSchema = new Schema<TAddress>({
   },
 });
 
-
-
-
-
+export const OrdersSchema = new Schema<TOrders>({
+  productName: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  price: {
+    type: Number,
+    required: true,
+    trim: true,
+  },
+  quantity: { type: Number, required: true, trim: true },
+});
 
 export const UserSchema = new Schema<TUsers>({
   userId: {
@@ -52,7 +66,7 @@ export const UserSchema = new Schema<TUsers>({
   userName: {
     type: String,
     required: [true, "User name is required"],
-    unique: true
+    unique: true,
   },
   password: {
     type: String,
@@ -77,11 +91,14 @@ export const UserSchema = new Schema<TUsers>({
     type: [String],
   },
 
-  orders: OrdersSchema
-  
+  orders: {
+    type: [OrdersSchema],
+    default: []
+  }
+
+
 });
 
+export const userModel = model<TUsers>("Users", UserSchema);
 
-export const userModel = model <TUsers>("Users", UserSchema);
-
-// this file is used to declare all the schema for users. 
+// this file is used to declare all the schema for users.
