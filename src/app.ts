@@ -18,7 +18,11 @@ app.use(express.json());
 // app.use(cors(corsOptions));
 
 app.use("/api/users", usersRoutes);
+
+// error handle
 app.use(errorHandler);
+
+// not found handler
 app.use(notFound);
 
 export default app;
