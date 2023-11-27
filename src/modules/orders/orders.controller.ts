@@ -1,10 +1,11 @@
 import { NextFunction, Request, Response } from "express";
-import { userModel } from "../users/users.model";
+import { OrdersSchema, userModel } from "../users/users.model";
 import {
   getAllOrderService,
   getTotalPriceService,
   placeOrderService,
 } from "./orders.services";
+import { JoiOrdersSchema } from "./orders.validation";
 
 // place order for a specific user
 export const placeOrder = async (
@@ -15,6 +16,18 @@ export const placeOrder = async (
   try {
     const order = req.body;
     const id = req.params.userId;
+    const { error, value } = JoiOrdersSchema.validate(order);
+
+    if (error) {
+      return res.status(400).json({
+        success: false,
+        message: error?.message,
+        error: {
+          code: 404,
+          description: error?.message,
+        },
+      });
+    }
     const result = await placeOrderService(id, order);
 
     res.status(200).json({
@@ -59,8 +72,7 @@ export const getTotalPrice = async (
     res.status(200).json({
       success: true,
       message: "Total Price calculated successfully!",
-      data: { totalPrice: totalPrice ? totalPrice.toFixed(2) : null }
-
+      data: { totalPrice: totalPrice ? totalPrice.toFixed(2) : null },
     });
   } catch (error) {
     next(error);

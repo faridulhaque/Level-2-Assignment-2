@@ -11,11 +11,23 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getTotalPrice = exports.getOrdersOfUser = exports.placeOrder = void 0;
 const orders_services_1 = require("./orders.services");
+const orders_validation_1 = require("./orders.validation");
 // place order for a specific user
 const placeOrder = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const order = req.body;
         const id = req.params.userId;
+        const { error, value } = orders_validation_1.JoiOrdersSchema.validate(order);
+        if (error) {
+            return res.status(400).json({
+                success: false,
+                message: error === null || error === void 0 ? void 0 : error.message,
+                error: {
+                    code: 404,
+                    description: error === null || error === void 0 ? void 0 : error.message,
+                },
+            });
+        }
         const result = yield (0, orders_services_1.placeOrderService)(id, order);
         res.status(200).json({
             success: true,
@@ -52,7 +64,7 @@ const getTotalPrice = (req, res, next) => __awaiter(void 0, void 0, void 0, func
         res.status(200).json({
             success: true,
             message: "Total Price calculated successfully!",
-            data: { totalPrice: totalPrice ? totalPrice.toFixed(2) : null }
+            data: { totalPrice: totalPrice ? totalPrice.toFixed(2) : null },
         });
     }
     catch (error) {
