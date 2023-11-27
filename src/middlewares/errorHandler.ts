@@ -15,4 +15,4 @@ const errorHandler = (
   });
 };
 export default errorHandler;
-//
+//global error handler function
