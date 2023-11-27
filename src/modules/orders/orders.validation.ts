@@ -5,3 +5,5 @@ export const JoiOrdersSchema = Joi.object({
   price: Joi.number().required(),
   quantity: Joi.number().required(),
 });
+
+// this file contains validation code for orderSchema
