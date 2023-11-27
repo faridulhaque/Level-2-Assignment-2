@@ -19,12 +19,7 @@ app.use(express.json());
 
 app.use("/api/users", usersRoutes);
 
-app.use("/", (req: Request, res: Response) => {
-  res.status(200).json({
-    success: true,
-    message: "Server is running!",
-  });
-});
+
 
 // error handle
 app.use(errorHandler);
