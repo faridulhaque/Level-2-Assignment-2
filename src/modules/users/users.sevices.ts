@@ -13,7 +13,6 @@ export const createUserService = async (user: TUsers) => {
 export const getAllUsersService = async () => {
   const result = await userModel.find().select({
     userName: 1,
-    userId: 1,
     age: 1,
     email: 1,
     "fullName.firstName": 1,
@@ -32,14 +31,16 @@ export const getAllUsersService = async () => {
 export const getOneUserService = async (id: string) => {
   const result = await userModel.findOne({ userId: id }).select({
     userName: 1,
-
-    fullName: 1,
+    userId: 1,
     age: 1,
     email: 1,
-    address: 1,
+    "fullName.firstName": 1,
+    "fullName.lastName": 1,
+    "address.city": 1,
+    "address.street": 1,
+    "address.country": 1,
     isActive: 1,
     hobbies: 1,
-    userId: 1,
     _id: 0,
   });
   return result;
