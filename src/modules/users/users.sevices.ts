@@ -34,7 +34,7 @@ export const getOneUserService = async (id: string) => {
     isActive: 1,
     hobbies: 1,
     userId: 1,
-    _id: 0
+    _id: 0,
   });
   return result;
 };

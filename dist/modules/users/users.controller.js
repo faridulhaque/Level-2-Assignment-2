@@ -69,7 +69,18 @@ exports.createUser = createUser;
 // this function is being used to getting all the existing users from database.
 const getAllUsers = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const result = yield (0, users_sevices_1.getAllUsersService)();
+        const response = yield (0, users_sevices_1.getAllUsersService)();
+        if (!(response === null || response === void 0 ? void 0 : response.length)) {
+            return res.status(404).json({
+                success: false,
+                message: "No users found!",
+                error: {
+                    code: 404,
+                    description: "User not found"
+                }
+            });
+        }
+        const result = response;
         res.status(200).json({
             success: true,
             message: "Users fetched successfully!",

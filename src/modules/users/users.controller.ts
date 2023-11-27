@@ -79,7 +79,20 @@ export const getAllUsers = async (
   next: NextFunction
 ) => {
   try {
-    const result = await getAllUsersService();
+    const response:any = await getAllUsersService();
+    if (!response?.length) {
+      return res.status(404).json({
+        success: false,
+        message: "No users found!",
+        error:{
+          code: 404,
+          description: "User not found"
+        }
+      });
+    }
+
+    const result = response
+
     res.status(200).json({
       success: true,
       message: "Users fetched successfully!",

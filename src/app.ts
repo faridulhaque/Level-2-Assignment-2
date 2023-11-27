@@ -1,4 +1,4 @@
-import express, { Application } from "express";
+import express, { Application, Request, Response } from "express";
 import cors from "cors";
 import { usersRoutes } from "./routes/users.routes";
 import errorHandler from "./middlewares/errorHandler";
@@ -18,6 +18,13 @@ app.use(express.json());
 // app.use(cors(corsOptions));
 
 app.use("/api/users", usersRoutes);
+
+app.use("/", (req: Request, res: Response) => {
+  res.status(200).json({
+    success: true,
+    message: "Server is running!",
+  });
+});
 
 // error handle
 app.use(errorHandler);

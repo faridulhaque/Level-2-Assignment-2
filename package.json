@@ -1,7 +1,7 @@
 {
   "scripts": {
     "start": "node ./dist/server.js",
-
+    "build": "tsc",
     "start-dev": "nodemon ./dist/server.js"
   },
   "dependencies": {
