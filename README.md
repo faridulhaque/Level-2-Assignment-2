@@ -2,4 +2,4 @@
 
 * yarn 
 * tsc
-* yarn start
+* nodemon ./dist/server.js
