@@ -13,6 +13,7 @@ export const createUserService = async (user: TUsers) => {
 export const getAllUsersService = async () => {
   const result = await userModel.find().select({
     userName: 1,
+    userId: 1,
     fullName: 1,
     age: 1,
     email: 1,
@@ -27,6 +28,7 @@ export const getAllUsersService = async () => {
 export const getOneUserService = async (id: string) => {
   const result = await userModel.findOne({ userId: id }).select({
     userName: 1,
+
     fullName: 1,
     age: 1,
     email: 1,
