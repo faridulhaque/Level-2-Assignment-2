@@ -73,7 +73,10 @@ export const UserSchema = new Schema<TUsers>({
     required: [true, "password is required"],
   },
 
-  fullName: FullNameSchema,
+  fullName: {
+    type: FullNameSchema,
+    required: [true, "Full name is required"],
+  },
   age: {
     type: Number,
   },
@@ -93,10 +96,8 @@ export const UserSchema = new Schema<TUsers>({
 
   orders: {
     type: [OrdersSchema],
-    default: []
-  }
-
-
+    default: [],
+  },
 });
 
 export const userModel = model<TUsers>("Users", UserSchema);

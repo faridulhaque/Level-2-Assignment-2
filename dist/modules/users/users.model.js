@@ -64,7 +64,10 @@ exports.UserSchema = new mongoose_1.Schema({
         type: String,
         required: [true, "password is required"],
     },
-    fullName: exports.FullNameSchema,
+    fullName: {
+        type: exports.FullNameSchema,
+        required: [true, "Full name is required"],
+    },
     age: {
         type: Number,
     },
@@ -82,8 +85,8 @@ exports.UserSchema = new mongoose_1.Schema({
     },
     orders: {
         type: [exports.OrdersSchema],
-        default: []
-    }
+        default: [],
+    },
 });
 exports.userModel = (0, mongoose_1.model)("Users", exports.UserSchema);
 // this file is used to declare all the schema for users.
