@@ -79,7 +79,10 @@ exports.UserSchema = new mongoose_1.Schema({
         type: Boolean,
         default: true,
     },
-    address: exports.AddressSchema,
+    address: {
+        type: exports.AddressSchema,
+        required: [true, "Address is required"],
+    },
     hobbies: {
         type: [String],
     },

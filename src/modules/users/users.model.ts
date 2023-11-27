@@ -88,7 +88,10 @@ export const UserSchema = new Schema<TUsers>({
     type: Boolean,
     default: true,
   },
-  address: AddressSchema,
+  address: {
+    type: AddressSchema,
+    required: [true, "Address is required"],
+  },
 
   hobbies: {
     type: [String],
