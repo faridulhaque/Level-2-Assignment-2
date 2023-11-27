@@ -14,10 +14,14 @@ export const getAllUsersService = async () => {
   const result = await userModel.find().select({
     userName: 1,
     userId: 1,
-    fullName: 1,
     age: 1,
     email: 1,
-    address: 1,
+    "fullName.firstName": 1,
+    "fullName.lastName": 1,
+    "address.city": 1,
+    "address.street": 1,
+    "address.country": 1,
+    _id: 0,
   });
 
   return result;

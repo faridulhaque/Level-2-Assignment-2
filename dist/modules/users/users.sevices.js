@@ -22,10 +22,14 @@ const getAllUsersService = () => __awaiter(void 0, void 0, void 0, function* () 
     const result = yield users_model_1.userModel.find().select({
         userName: 1,
         userId: 1,
-        fullName: 1,
         age: 1,
         email: 1,
-        address: 1,
+        "fullName.firstName": 1,
+        "fullName.lastName": 1,
+        "address.city": 1,
+        "address.street": 1,
+        "address.country": 1,
+        _id: 0,
     });
     return result;
 });

@@ -10,4 +10,4 @@ const errorHandler = (err, req, res) => {
     });
 };
 exports.default = errorHandler;
-//
+//global error handler function

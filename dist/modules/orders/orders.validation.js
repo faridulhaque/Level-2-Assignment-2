@@ -10,3 +10,4 @@ exports.JoiOrdersSchema = joi_1.default.object({
     price: joi_1.default.number().required(),
     quantity: joi_1.default.number().required(),
 });
+// this file contains validation code for orderSchema
