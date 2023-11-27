@@ -52,7 +52,7 @@ const getTotalPrice = (req, res, next) => __awaiter(void 0, void 0, void 0, func
         res.status(200).json({
             success: true,
             message: "Total Price calculated successfully!",
-            data: { totalPrice },
+            data: { totalPrice: totalPrice ? totalPrice.toFixed(2) : null }
         });
     }
     catch (error) {

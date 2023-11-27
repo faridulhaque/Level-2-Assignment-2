@@ -15,7 +15,6 @@ export const placeOrder = async (
   try {
     const order = req.body;
     const id = req.params.userId;
-
     const result = await placeOrderService(id, order);
 
     res.status(200).json({
@@ -56,11 +55,12 @@ export const getTotalPrice = async (
 ) => {
   try {
     const id = req.params.userId;
-    const totalPrice = await getTotalPriceService(id);
+    const totalPrice: number | null = await getTotalPriceService(id);
     res.status(200).json({
       success: true,
       message: "Total Price calculated successfully!",
-      data: { totalPrice },
+      data: { totalPrice: totalPrice ? totalPrice.toFixed(2) : null }
+
     });
   } catch (error) {
     next(error);

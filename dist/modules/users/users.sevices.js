@@ -21,6 +21,7 @@ exports.createUserService = createUserService;
 const getAllUsersService = () => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield users_model_1.userModel.find().select({
         userName: 1,
+        userId: 1,
         fullName: 1,
         age: 1,
         email: 1,

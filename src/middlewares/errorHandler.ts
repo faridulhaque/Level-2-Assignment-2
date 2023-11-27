@@ -1,16 +1,18 @@
 import { Request, Response } from "express";
 
-const errorHandler = (error: any, req: Request, res: Response) => {
-    res.status(500).json({
-        success: false,
-        message: error?.message || "Something went wrong",
-        error: {
-            code: 404,
-            description: error?.message || "Something went wrong"
-            
-        }
-    })
-};
+const errorHandler = (
+  err: any,
+  req: Request,
+  res: Response,
+) => {
+  const statusCode = 500;
+  const message = err.message || "Something went wrong!";
 
+  return res.status(statusCode).json({
+    success: false,
+    message,
+    error: err,
+  });
+};
 export default errorHandler;
-// 
+//

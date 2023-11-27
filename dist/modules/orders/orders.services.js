@@ -22,7 +22,12 @@ const getAllOrderService = (id) => __awaiter(void 0, void 0, void 0, function* (
     if (id) {
         const res = yield users_model_1.userModel
             .findOne({ userId: id })
-            .select({ 'orders.productName': 1, 'orders.price': 1, 'orders.quantity': 1, _id: 0 });
+            .select({
+            "orders.productName": 1,
+            "orders.price": 1,
+            "orders.quantity": 1,
+            _id: 0,
+        });
         return res;
     }
     return null;
