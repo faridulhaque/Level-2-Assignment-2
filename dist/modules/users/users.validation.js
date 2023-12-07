@@ -17,7 +17,7 @@ exports.JoiAddressSchema = joi_1.default.object({
 });
 exports.JoiUserSchema = joi_1.default.object({
     userId: joi_1.default.number().required(),
-    userName: joi_1.default.string().required(),
+    username: joi_1.default.string().required(),
     password: joi_1.default.string().required(),
     fullName: exports.JoiFullNameSchema,
     age: joi_1.default.number(),

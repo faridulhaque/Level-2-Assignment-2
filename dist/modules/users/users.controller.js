@@ -23,12 +23,12 @@ const createUser = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
     try {
         const newUser = req.body;
         const user = yield users_model_1.userModel.findOne({
-            $or: [{ userName: (_a = req === null || req === void 0 ? void 0 : req.body) === null || _a === void 0 ? void 0 : _a.userName }, { userId: (_b = req === null || req === void 0 ? void 0 : req.body) === null || _b === void 0 ? void 0 : _b.userId }],
+            $or: [{ username: (_a = req === null || req === void 0 ? void 0 : req.body) === null || _a === void 0 ? void 0 : _a.username }, { userId: (_b = req === null || req === void 0 ? void 0 : req.body) === null || _b === void 0 ? void 0 : _b.userId }],
         });
         if (user === null || user === void 0 ? void 0 : user.userId) {
             return res.status(400).json({
                 success: false,
-                message: "User already exists",
+                message: "User already exists with this username or userId",
                 error: {
                     code: 404,
                     description: "User already exists",
@@ -50,11 +50,7 @@ const createUser = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
         const salt = yield bcrypt_1.default.genSalt();
         const passwordHash = yield bcrypt_1.default.hash(newUser === null || newUser === void 0 ? void 0 : newUser.password, salt);
         value.password = passwordHash;
-        const response = yield (0, users_sevices_1.createUserService)(value);
-        const result = response === null || response === void 0 ? void 0 : response.toObject();
-        delete result.password;
-        delete result._id;
-        delete result.orders;
+        const result = yield (0, users_sevices_1.createUserService)(value);
         res.status(200).json({
             success: true,
             message: "User created successfully!",
@@ -76,8 +72,8 @@ const getAllUsers = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
                 message: "No users found!",
                 error: {
                     code: 404,
-                    description: "User not found"
-                }
+                    description: "User not found",
+                },
             });
         }
         const result = response;
@@ -141,11 +137,10 @@ const updateUser = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
             });
         }
         const existingUser = yield users_model_1.userModel.findOne({
-            $or: [{ userName: newData === null || newData === void 0 ? void 0 : newData.userName }, { userId: newData === null || newData === void 0 ? void 0 : newData.userId }],
+            username: newData.username,
         });
         if (!(existingUser === null || existingUser === void 0 ? void 0 : existingUser.userId)) {
-            const salt = yield bcrypt_1.default.genSalt();
-            const passwordHash = yield bcrypt_1.default.hash(newData === null || newData === void 0 ? void 0 : newData.password, salt);
+            const passwordHash = yield handlePassword(newData === null || newData === void 0 ? void 0 : newData.password);
             value.password = passwordHash;
             const response = yield (0, users_sevices_1.updateUserService)(userId, value);
             if (response === null || response === void 0 ? void 0 : response.acknowledged) {
@@ -158,14 +153,29 @@ const updateUser = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
             }
         }
         else {
-            return res.status(400).json({
-                success: false,
-                message: "Username or userId already in use",
-                error: {
-                    code: 404,
-                    description: "Username or userId already in use",
-                },
-            });
+            if ((existingUser === null || existingUser === void 0 ? void 0 : existingUser.userId) === (newData === null || newData === void 0 ? void 0 : newData.userId)) {
+                const passwordHash = yield handlePassword(newData === null || newData === void 0 ? void 0 : newData.password);
+                value.password = passwordHash;
+                const response = yield (0, users_sevices_1.updateUserService)(userId, value);
+                if (response === null || response === void 0 ? void 0 : response.acknowledged) {
+                    const result = yield (0, users_sevices_1.getOneUserService)(newData === null || newData === void 0 ? void 0 : newData.userId);
+                    return res.status(200).json({
+                        success: true,
+                        message: "User updated successfully!",
+                        data: result,
+                    });
+                }
+            }
+            else {
+                return res.status(400).json({
+                    success: false,
+                    message: "Username already in use",
+                    error: {
+                        code: 404,
+                        description: "Username or userId already in use",
+                    },
+                });
+            }
         }
     }
     catch (error) {
@@ -174,3 +184,8 @@ const updateUser = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
 });
 exports.updateUser = updateUser;
 // this one is not a controller but a function that is called inside a few controllers
+const handlePassword = (password) => __awaiter(void 0, void 0, void 0, function* () {
+    const salt = yield bcrypt_1.default.genSalt();
+    const passwordHash = yield bcrypt_1.default.hash(password, salt);
+    return passwordHash;
+});

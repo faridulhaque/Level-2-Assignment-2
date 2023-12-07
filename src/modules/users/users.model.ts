@@ -63,7 +63,7 @@ export const UserSchema = new Schema<TUsers>({
     trim: true,
     unique: true,
   },
-  userName: {
+  username: {
     type: String,
     required: [true, "User name is required"],
     unique: true,

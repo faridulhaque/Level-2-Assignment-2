@@ -14,7 +14,7 @@ export const JoiAddressSchema = Joi.object({
 
 export const JoiUserSchema = Joi.object({
   userId: Joi.number().required(),
-  userName: Joi.string().required(),
+  username: Joi.string().required(),
   password: Joi.string().required(),
   fullName: JoiFullNameSchema,
   age: Joi.number(),

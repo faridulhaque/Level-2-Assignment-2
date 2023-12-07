@@ -10,6 +10,7 @@ import {
 import { JoiUserSchema } from "./users.validation";
 import { doesUserExist } from "../orders/doesUserExist";
 import { userModel } from "./users.model";
+import { TUsers } from "./users.interfaces";
 
 // this function is used to create a new user in database.
 
@@ -22,13 +23,13 @@ export const createUser = async (
     const newUser = req.body;
 
     const user = await userModel.findOne({
-      $or: [{ userName: req?.body?.userName }, { userId: req?.body?.userId }],
+      $or: [{ username: req?.body?.username }, { userId: req?.body?.userId }],
     });
 
     if (user?.userId) {
       return res.status(400).json({
         success: false,
-        message: "User already exists",
+        message: "User already exists with this username or userId",
         error: {
           code: 404,
           description: "User already exists",
@@ -53,13 +54,7 @@ export const createUser = async (
     const passwordHash = await bcrypt.hash(newUser?.password, salt);
     value.password = passwordHash;
 
-    const response = await createUserService(value);
-
-    const result: any = response?.toObject();
-
-    delete result.password;
-    delete result._id;
-    delete result.orders;
+    const result = await createUserService(value);
 
     res.status(200).json({
       success: true,
@@ -79,19 +74,19 @@ export const getAllUsers = async (
   next: NextFunction
 ) => {
   try {
-    const response:any = await getAllUsersService();
+    const response: any = await getAllUsersService();
     if (!response?.length) {
       return res.status(404).json({
         success: false,
         message: "No users found!",
-        error:{
+        error: {
           code: 404,
-          description: "User not found"
-        }
+          description: "User not found",
+        },
       });
     }
 
-    const result = response
+    const result = response;
 
     res.status(200).json({
       success: true,
@@ -134,6 +129,7 @@ export const deleteOneUser = async (
   try {
     const id = req.params.userId;
     const result = await deleteOneUserService(id);
+
     res.status(200).json({
       success: true,
       message: "User deleted successfully!",
@@ -169,12 +165,11 @@ export const updateUser = async (
     }
 
     const existingUser = await userModel.findOne({
-      $or: [{ userName: newData?.userName }, { userId: newData?.userId }],
+      username: newData.username,
     });
 
     if (!existingUser?.userId) {
-      const salt = await bcrypt.genSalt();
-      const passwordHash = await bcrypt.hash(newData?.password, salt);
+      const passwordHash = await handlePassword(newData?.password);
 
       value.password = passwordHash;
 
@@ -189,14 +184,31 @@ export const updateUser = async (
         });
       }
     } else {
-      return res.status(400).json({
-        success: false,
-        message: "Username or userId already in use",
-        error: {
-          code: 404,
-          description: "Username or userId already in use",
-        },
-      });
+      if (existingUser?.userId === newData?.userId) {
+        const passwordHash = await handlePassword(newData?.password);
+
+        value.password = passwordHash;
+
+        const response = await updateUserService(userId, value);
+
+        if (response?.acknowledged) {
+          const result: any = await getOneUserService(newData?.userId);
+          return res.status(200).json({
+            success: true,
+            message: "User updated successfully!",
+            data: result,
+          });
+        }
+      } else {
+        return res.status(400).json({
+          success: false,
+          message: "Username already in use",
+          error: {
+            code: 404,
+            description: "Username or userId already in use",
+          },
+        });
+      }
     }
   } catch (error) {
     next(error);
@@ -204,3 +216,10 @@ export const updateUser = async (
 };
 
 // this one is not a controller but a function that is called inside a few controllers
+
+const handlePassword = async (password: string) => {
+  const salt = await bcrypt.genSalt();
+  const passwordHash = await bcrypt.hash(password, salt);
+
+  return passwordHash;
+};

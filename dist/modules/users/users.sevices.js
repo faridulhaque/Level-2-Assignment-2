@@ -13,22 +13,40 @@ exports.updateUserService = exports.deleteOneUserService = exports.getOneUserSer
 const users_model_1 = require("./users.model");
 // creating user in database
 const createUserService = (user) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield users_model_1.userModel.create(user);
+    var _a, _b;
+    const res = yield users_model_1.userModel.create(user);
+    const result = {
+        userId: res === null || res === void 0 ? void 0 : res.userId,
+        username: res === null || res === void 0 ? void 0 : res.username,
+        fullName: {
+            firstName: (_a = res === null || res === void 0 ? void 0 : res.fullName) === null || _a === void 0 ? void 0 : _a.firstName,
+            lastName: (_b = res === null || res === void 0 ? void 0 : res.fullName) === null || _b === void 0 ? void 0 : _b.lastName,
+        },
+        age: res === null || res === void 0 ? void 0 : res.age,
+        email: res === null || res === void 0 ? void 0 : res.email,
+        isActive: res === null || res === void 0 ? void 0 : res.isActive,
+        hobbies: res === null || res === void 0 ? void 0 : res.hobbies,
+        address: {
+            street: res === null || res === void 0 ? void 0 : res.address.street,
+            city: res === null || res === void 0 ? void 0 : res.address.city,
+            country: res === null || res === void 0 ? void 0 : res.address.country,
+        },
+    };
     return result;
 });
 exports.createUserService = createUserService;
 // getting all users specific data
 const getAllUsersService = () => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield users_model_1.userModel.find().select({
-        userName: 1,
-        age: 1,
-        email: 1,
-        "fullName.firstName": 1,
-        "fullName.lastName": 1,
-        "address.city": 1,
-        "address.street": 1,
-        "address.country": 1,
+        userId: 0,
+        isActive: 0,
+        hobbies: 0,
+        orders: 0,
+        __v: 0,
+        "fullName._id": 0,
+        "address._id": 0,
         _id: 0,
+        password: 0,
     });
     return result;
 });
@@ -36,7 +54,7 @@ exports.getAllUsersService = getAllUsersService;
 // getting one user
 const getOneUserService = (id) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield users_model_1.userModel.findOne({ userId: id }).select({
-        userName: 1,
+        username: 1,
         userId: 1,
         age: 1,
         email: 1,
@@ -54,7 +72,7 @@ const getOneUserService = (id) => __awaiter(void 0, void 0, void 0, function* ()
 exports.getOneUserService = getOneUserService;
 // deleting one user
 const deleteOneUserService = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield users_model_1.userModel.deleteOne({ userId: id });
+    const result = yield users_model_1.userModel.deleteOne({ userId: Number(id) });
     return result;
 });
 exports.deleteOneUserService = deleteOneUserService;

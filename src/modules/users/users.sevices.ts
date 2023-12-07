@@ -4,7 +4,24 @@ import { userModel } from "./users.model";
 
 // creating user in database
 export const createUserService = async (user: TUsers) => {
-  const result = await userModel.create(user);
+  const res = await userModel.create(user);
+  const result = {
+    userId: res?.userId,
+    username: res?.username,
+    fullName: {
+      firstName: res?.fullName?.firstName,
+      lastName: res?.fullName?.lastName,
+    },
+    age: res?.age,
+    email: res?.email,
+    isActive: res?.isActive,
+    hobbies: res?.hobbies,
+    address: {
+      street: res?.address.street,
+      city: res?.address.city,
+      country: res?.address.country,
+    },
+  };
 
   return result;
 };
@@ -12,15 +29,15 @@ export const createUserService = async (user: TUsers) => {
 // getting all users specific data
 export const getAllUsersService = async () => {
   const result = await userModel.find().select({
-    userName: 1,
-    age: 1,
-    email: 1,
-    "fullName.firstName": 1,
-    "fullName.lastName": 1,
-    "address.city": 1,
-    "address.street": 1,
-    "address.country": 1,
+    userId: 0,
+    isActive: 0,
+    hobbies: 0,
+    orders: 0,
+    __v: 0,
+    "fullName._id": 0,
+    "address._id": 0,
     _id: 0,
+    password: 0,
   });
 
   return result;
@@ -30,7 +47,7 @@ export const getAllUsersService = async () => {
 
 export const getOneUserService = async (id: string) => {
   const result = await userModel.findOne({ userId: id }).select({
-    userName: 1,
+    username: 1,
     userId: 1,
     age: 1,
     email: 1,
@@ -48,7 +65,7 @@ export const getOneUserService = async (id: string) => {
 
 // deleting one user
 export const deleteOneUserService = async (id: string) => {
-  const result = await userModel.deleteOne({ userId: id });
+  const result = await userModel.deleteOne({ userId: Number(id) });
   return result;
 };
 

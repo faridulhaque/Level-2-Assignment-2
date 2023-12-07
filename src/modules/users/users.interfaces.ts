@@ -20,7 +20,7 @@ export type TAddress ={
 
 export type TUsers = {
     userId: number,
-    userName: string,
+    username: string,
     password: string,
     fullName: TFullName,
     age: number,
