@@ -18,14 +18,10 @@ app.use(express.json());
 
 app.use("/api/users", usersRoutes);
 
-
-app.use("/", (req: Request, res: Response) => {
-    res.status(200).json({message: "Server is running"})
-})
-
 app.use("*", (req: Request, res: Response) => {
-    res.status(200).json({message: "no route found"})
-})
+  res.status(200).json({ message: "no route found" });
+});
+
 
 
 // error handle
